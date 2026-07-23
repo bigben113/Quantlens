@@ -1,23 +1,31 @@
-# Prompt to execute in Claude Code
+# Claude Execution Prompt — QL-002
 
-Copy the text below into Claude Code from the root of the local QuantLens repository after copying this rules package into the repository.
+Read `CLAUDE.md`, `docs/ai/RULES.md`, and every other file under `docs/ai/` before doing anything else.
 
----
+Execute only:
 
-Read `CLAUDE.md` and every file under `docs/ai/` before doing anything else.
+```text
+docs/ai/tasks/QL-002_FULL_STACK_FOUNDATION.md
+```
 
-Execute only the current task `QL-001` from `docs/ai/TASKS.md`.
+The goal is one complete runnable vertical slice:
 
-Important constraints:
+```text
+React Web
+    ↓ REST
+Spring Boot API
+    ↓ REST
+FastAPI AI Service
+```
 
-- First inspect the real repository and Git state.
-- Do not generate application feature code in this task.
-- Do not initialize Spring Boot, React, or FastAPI unless the repository already contains such code and the task only requires documenting it.
-- Integrate or merge the governance files carefully.
-- Update the AI state documents with facts observed from the repository.
-- Do not invent successful commands or repository details.
-- Run appropriate validation for Markdown and repository cleanliness.
-- Return the exact completion report required by `docs/ai/WORKFLOW.md`.
-- Include `git diff --stat`.
-- Suggest one commit message.
-- Stop after QL-001 and wait for review.
+Important:
+
+- Implement the health/status flow across all three layers.
+- Do not implement business features, databases, authentication, market data, or ML models.
+- Keep scope exactly within QL-002.
+- Run the real build and test commands.
+- Verify the end-to-end flow where the environment allows.
+- Update the required `docs/ai` state files.
+- Return the handoff report defined in `docs/ai/WORKFLOW.md`.
+- Do not commit or push.
+- Stop after QL-002 and wait for review.
