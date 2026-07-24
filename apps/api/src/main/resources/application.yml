@@ -5,6 +5,29 @@ spring:
   application:
     name: quantlens-api
 
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:quantlens}
+    username: ${DB_USERNAME:quantlens}
+    password: ${DB_PASSWORD:quantlens}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:10}
+      minimum-idle: ${DB_POOL_MIN_IDLE:2}
+      connection-timeout: ${DB_POOL_CONNECTION_TIMEOUT_MS:3000}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: "0"
+    clean-disabled: true
+
 quantlens:
   version: 0.1.0
   ai-service:

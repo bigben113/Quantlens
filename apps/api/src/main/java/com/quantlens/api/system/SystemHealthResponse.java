@@ -5,12 +5,15 @@ import java.time.Instant;
 public record SystemHealthResponse(
         String service,
         String status,
+        String database,
         AiServiceHealthResponse aiService,
         String version,
         Instant timestamp) {
 
-    public static SystemHealthResponse of(AiServiceHealthResponse aiService, String apiVersion) {
-        String status = "UP".equals(aiService.status()) ? "UP" : "DEGRADED";
-        return new SystemHealthResponse("quantlens-api", status, aiService, apiVersion, Instant.now());
+    public static SystemHealthResponse of(boolean databaseUp, AiServiceHealthResponse aiService, String apiVersion) {
+        boolean aiUp = "UP".equals(aiService.status());
+        String status = (databaseUp && aiUp) ? "UP" : "DEGRADED";
+        String database = databaseUp ? "UP" : "DOWN";
+        return new SystemHealthResponse("quantlens-api", status, database, aiService, apiVersion, Instant.now());
     }
 }

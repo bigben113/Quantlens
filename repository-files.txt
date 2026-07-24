@@ -64,3 +64,4 @@ docs/ai/TASKS_UPDATE_QL-002.md
 docs/ai/TASK_TEMPLATE.md
 docs/ai/WORKFLOW.md
 docs/ai/tasks/QL-002_FULL_STACK_FOUNDATION.md
+repository-files.txt

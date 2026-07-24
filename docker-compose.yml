@@ -1,4 +1,20 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-quantlens}
+      POSTGRES_USER: ${DB_USERNAME:-quantlens}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-quantlens}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - quantlens-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-quantlens} -d ${DB_NAME:-quantlens}"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
   ai-service:
     build:
       context: ./apps/ai-service
@@ -21,8 +37,15 @@ services:
       AI_SERVICE_BASE_URL: http://ai-service:8000
       AI_SERVICE_TIMEOUT_MS: ${AI_SERVICE_TIMEOUT_MS:-2000}
       WEB_ORIGIN: http://localhost:${WEB_PORT:-5173}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-quantlens}
+      DB_USERNAME: ${DB_USERNAME:-quantlens}
+      DB_PASSWORD: ${DB_PASSWORD:-quantlens}
     depends_on:
       ai-service:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:8086/api/v1/system/health || exit 1"]
@@ -39,3 +62,6 @@ services:
       VITE_API_BASE_URL: http://localhost:${API_PORT:-8086}
     depends_on:
       - api
+
+volumes:
+  quantlens-postgres-data:

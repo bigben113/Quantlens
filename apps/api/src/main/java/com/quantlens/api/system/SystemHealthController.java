@@ -8,18 +8,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemHealthController {
 
     private final AiServiceClient aiServiceClient;
+    private final DatabaseHealthChecker databaseHealthChecker;
     private final String apiVersion;
 
     public SystemHealthController(
             AiServiceClient aiServiceClient,
+            DatabaseHealthChecker databaseHealthChecker,
             @Value("${quantlens.version}") String apiVersion) {
         this.aiServiceClient = aiServiceClient;
+        this.databaseHealthChecker = databaseHealthChecker;
         this.apiVersion = apiVersion;
     }
 
     @GetMapping("/api/v1/system/health")
     public SystemHealthResponse getSystemHealth() {
         AiServiceHealthResponse aiHealth = aiServiceClient.fetchHealth();
-        return SystemHealthResponse.of(aiHealth, apiVersion);
+        boolean databaseUp = databaseHealthChecker.isUp();
+        return SystemHealthResponse.of(databaseUp, aiHealth, apiVersion);
     }
 }

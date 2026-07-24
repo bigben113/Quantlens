@@ -23,16 +23,21 @@ class SystemHealthControllerTest {
     @MockitoBean
     private AiServiceClient aiServiceClient;
 
+    @MockitoBean
+    private DatabaseHealthChecker databaseHealthChecker;
+
     @Test
-    void returnsUpStatusAndContractWhenAiServiceIsAvailable() throws Exception {
+    void returnsUpStatusAndContractWhenDatabaseAndAiServiceAreAvailable() throws Exception {
         when(aiServiceClient.fetchHealth())
                 .thenReturn(AiServiceHealthResponse.up("quantlens-ai-service", "0.1.0"));
+        when(databaseHealthChecker.isUp()).thenReturn(true);
 
         mockMvc.perform(get("/api/v1/system/health"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.service").value("quantlens-api"))
                 .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.database").value("UP"))
                 .andExpect(jsonPath("$.aiService.status").value("UP"))
                 .andExpect(jsonPath("$.aiService.service").value("quantlens-ai-service"))
                 .andExpect(jsonPath("$.aiService.version").value("0.1.0"))
@@ -43,13 +48,29 @@ class SystemHealthControllerTest {
     @Test
     void returnsDegradedStatusWhenAiServiceIsUnavailable() throws Exception {
         when(aiServiceClient.fetchHealth()).thenReturn(AiServiceHealthResponse.down());
+        when(databaseHealthChecker.isUp()).thenReturn(true);
 
         mockMvc.perform(get("/api/v1/system/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.service").value("quantlens-api"))
                 .andExpect(jsonPath("$.status").value("DEGRADED"))
+                .andExpect(jsonPath("$.database").value("UP"))
                 .andExpect(jsonPath("$.aiService.status").value("DOWN"))
                 .andExpect(jsonPath("$.aiService.service").doesNotExist())
                 .andExpect(jsonPath("$.aiService.version").doesNotExist());
+    }
+
+    @Test
+    void returnsDegradedStatusWhenDatabaseIsUnavailable() throws Exception {
+        when(aiServiceClient.fetchHealth())
+                .thenReturn(AiServiceHealthResponse.up("quantlens-ai-service", "0.1.0"));
+        when(databaseHealthChecker.isUp()).thenReturn(false);
+
+        mockMvc.perform(get("/api/v1/system/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.service").value("quantlens-api"))
+                .andExpect(jsonPath("$.status").value("DEGRADED"))
+                .andExpect(jsonPath("$.database").value("DOWN"))
+                .andExpect(jsonPath("$.aiService.status").value("UP"));
     }
 }
