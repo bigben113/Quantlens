@@ -1,0 +1,20 @@
+server:
+  port: ${API_PORT:8086}
+
+spring:
+  application:
+    name: quantlens-api
+
+quantlens:
+  version: 0.1.0
+  ai-service:
+    base-url: ${AI_SERVICE_BASE_URL:http://localhost:8000}
+    timeout-ms: ${AI_SERVICE_TIMEOUT_MS:2000}
+  web:
+    allowed-origin: ${WEB_ORIGIN:http://localhost:5173}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

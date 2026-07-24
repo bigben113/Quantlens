@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# --- Java / Maven (apps/api) ---
+apps/api/target/
+apps/api/.mvn/wrapper/maven-wrapper.jar
+!apps/api/.mvn/wrapper/maven-wrapper.properties
+
+# --- Python (apps/ai-service) ---
+apps/ai-service/__pycache__/
+apps/ai-service/**/__pycache__/
+apps/ai-service/.pytest_cache/
+apps/ai-service/.venv/
+apps/ai-service/*.egg-info/
+apps/ai-service/.mypy_cache/
+apps/ai-service/.ruff_cache/
+
+# --- Node / React (apps/web) ---
+apps/web/node_modules/
+apps/web/dist/
+apps/web/coverage/
+apps/web/.vite/
+
+# Logs
+*.log
+npm-debug.log*
