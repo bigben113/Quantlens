@@ -13,6 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 WORKDIR /app
 COPY --from=build /workspace/target/api-*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8086
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

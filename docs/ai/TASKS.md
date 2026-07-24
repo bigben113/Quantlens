@@ -23,4 +23,5 @@ To be approved by the architecture reviewer. Likely candidates:
   - `GET /api/v1/system/health` (API) calls `GET /health` (AI service) over REST with a configurable base URL/timeout; reports `DEGRADED` without crashing when the AI service is unavailable.
   - React "System Status" page calls only the Spring Boot API and renders Web/API/AI statuses with loading, error, and degraded states.
   - Root `docker-compose.yml` orchestrates all three services with health checks; verified end to end.
+  - Degraded/recovery lifecycle verified live: stopping `ai-service` leaves the API available and reporting `DEGRADED` (`aiService.status: DOWN`); restarting `ai-service` returns the full system to `UP`.
   - All relevant tests, lint, and builds pass (see handoff report for exact commands and results).

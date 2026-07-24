@@ -34,3 +34,4 @@ apps/web/.vite/
 # Logs
 *.log
 npm-debug.log*
+*.patch

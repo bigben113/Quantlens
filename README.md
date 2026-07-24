@@ -68,7 +68,7 @@ npm install
 npm run dev
 ```
 
-Uses `VITE_API_BASE_URL` (default `http://localhost:8080`) to reach the Spring Boot API. The browser never calls the AI service directly.
+Uses `VITE_API_BASE_URL` (default `http://localhost:8086`) to reach the Spring Boot API. The browser never calls the AI service directly.
 
 ## Test and build commands
 
@@ -94,9 +94,9 @@ npm run build
 | Service    | URL                                      |
 |------------|-------------------------------------------|
 | Web        | http://localhost:5173                      |
-| API        | http://localhost:8080                      |
-| API health | http://localhost:8080/api/v1/system/health |
-| Swagger    | http://localhost:8080/swagger-ui.html      |
+| API        | http://localhost:8086                      |
+| API health | http://localhost:8086/api/v1/system/health |
+| Swagger    | http://localhost:8086/swagger-ui.html      |
 | AI service | http://localhost:8000                      |
 | AI health  | http://localhost:8000/health               |
 

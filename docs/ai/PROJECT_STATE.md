@@ -1,10 +1,10 @@
 # QuantLens Project State
 
-Last updated: 2026-07-23 (QL-002 — Full-Stack Foundation Vertical Slice).
+Last updated: 2026-07-24 (QL-002 — full end-to-end verification, including degraded-flow and recovery).
 
 ## Current phase
 
-QL-002 complete: a runnable, tested, end-to-end health/status vertical slice across Web → API → AI Service.
+QL-002 complete: a runnable, tested, end-to-end health/status vertical slice across Web → API → AI Service. Full lifecycle verified via Docker Compose: UP → AI service stopped (API reports DEGRADED, stays available) → AI service restarted (full system returns to UP).
 
 ## Current status
 
@@ -23,7 +23,7 @@ https://github.com/bigben113/Quantlens
 - Architecture guardrails agreed.
 - Claude working rules prepared.
 - QL-001 — repository assessment and governance bootstrap.
-- QL-002 — full-stack health vertical slice (Web → API → AI Service), with tests passing and Docker Compose orchestration verified end to end.
+- QL-002 — full-stack health vertical slice (Web → API → AI Service), with tests passing and Docker Compose orchestration verified end to end, including the degraded/recovery lifecycle (AI service stopped → API reports DEGRADED and stays available → AI service restarted → full system returns to UP).
 
 ## In progress
 
@@ -31,7 +31,7 @@ https://github.com/bigben113/Quantlens
 
 ## Blocked
 
-- None. Note for future Docker verification on this machine: ports 8000 and 8080 may already be bound by unrelated local projects; `.env` port variables (`API_PORT`, `AI_SERVICE_PORT`, `WEB_PORT`) can be overridden to avoid conflicts without changing the repository defaults.
+- None. Port 8080 was already bound by an unrelated local project on this machine, so the default API port was changed to **8086** (`apps/api/src/main/resources/application.yml`, `apps/web/src/api/systemHealth.ts`, `docker-compose.yml`, `.env.example`, `README.md` all updated to match). Port 8000 may still be bound by another unrelated local project; override `AI_SERVICE_PORT` in `.env` if needed.
 
 ## Next milestone
 
