@@ -43,6 +43,10 @@ This log records AI-assisted repository changes. It is not a replacement for Git
 - Full backend/AI/frontend/Docker validation suite re-run and passing: `./mvnw test` (4/4), `./mvnw package` (BUILD SUCCESS), `pytest` (2/2), `npm run lint`, `npm run test -- --run` (4/4), `npm run build`, `docker compose config`.
 - QL-003 verified live via `docker compose up --build`: Flyway applied `V1__baseline_schema.sql` on startup (confirmed in `flyway_schema_history`); `app_settings`, `job_execution`, `model_registry` tables exist with expected columns/indexes/constraints (confirmed via `psql \d`); Hibernate `ddl-auto=validate` passed (app started successfully) and `GET /api/v1/system/health` returned `database: "UP"`.
 - QL-003 degraded/recovery flow verified live: `docker compose stop postgres` → API container stayed `Up`/`healthy`, `GET /api/v1/system/health` returned `status: DEGRADED`, `database: "DOWN"` in ~3s; `docker compose start postgres` → full system returned to `status: UP`, `database: "UP"`.
+- QL-003 mandatory self-verification re-run (2026-07-24): `./mvnw clean verify` (BUILD SUCCESS, 8/8 tests), `npm install` + `npm run build` (succeeded) + `npm run test -- --run` (4/4), AI service `pip install` + `pytest` (2/2), `docker compose up -d --build` (all 4 containers healthy), Flyway confirmed already at schema version 1 with no re-migration needed (Postgres volume persisted from a prior run), tables/health-endpoint/degraded/recovery re-confirmed live, stack torn down cleanly afterward.
+
+### Repository state note
+- On starting the self-verification pass, the working branch was found to be `QL-003` (not `feature/QL-003-database-foundation`, which had been created for QL-003) with all QL-003 changes already committed in `9fa136c "start-app"`. This commit/branch-switch was not performed by Claude in this session — CLAUDE.md's "do not commit" instruction was in effect throughout QL-003's implementation. No work was lost; the committed content matches what was implemented and verified.
 
 ### Known limitations
 - No Redis, MinIO, or authentication integration yet (out of scope for QL-003 by design).
